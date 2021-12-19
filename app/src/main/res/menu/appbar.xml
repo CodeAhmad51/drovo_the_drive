@@ -8,9 +8,10 @@
         android:title="Search"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always"
+
         />
     <item
-        android:id="@+id/menu"
+        android:id="@+id/LogOut"
         android:title="LogOut"
         />
 

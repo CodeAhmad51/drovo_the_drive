@@ -12,7 +12,7 @@
 
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/RegisterUsername"
         android:layout_width="220dp"
         android:layout_height="40dp"
         android:layout_marginTop="260dp"
@@ -24,7 +24,7 @@
         />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/RegisterPassword"
         android:layout_width="222dp"
         android:layout_height="34dp"
         android:layout_gravity="center"
@@ -37,7 +37,7 @@
         android:textColorHint="@color/white"/>
 
     <EditText
-        android:id="@+id/mobile_no."
+        android:id="@+id/RegisterPhoneNO"
         android:layout_width="222dp"
         android:layout_height="34dp"
         android:layout_gravity="center"
@@ -49,7 +49,7 @@
         android:textStyle="bold"
         android:textColorHint="@color/white"/>
     <Button
-        android:id="@+id/Login_button"
+        android:id="@+id/sign_button"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:layout_gravity="center_horizontal"
@@ -75,7 +75,7 @@
 
             />
         <TextView
-            android:id="@+id/SignUp_text"
+            android:id="@+id/LogIn_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#01579B"

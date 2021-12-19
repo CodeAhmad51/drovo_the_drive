@@ -19,20 +19,20 @@
         />
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/LogInPhoneNo"
         android:layout_width="220dp"
         android:layout_height="40dp"
         android:layout_marginTop="60dp"
         android:layout_gravity="center"
         android:background="@drawable/log_in_text_view"
-        android:hint="username"
+        android:hint="PhoneNo"
         android:gravity="center"
         android:textStyle="bold"
         android:textColorHint="@color/white"
         />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/LogInpassword"
         android:layout_width="222dp"
         android:layout_height="34dp"
         android:layout_gravity="center"
@@ -76,7 +76,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="don't have account ?"
+            android:text="don't have an account ?"
             android:textStyle="bold"
             android:layout_gravity="center"
 
