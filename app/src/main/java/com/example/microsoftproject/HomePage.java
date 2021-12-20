@@ -3,19 +3,25 @@ package com.example.microsoftproject;
 import static com.example.microsoftproject.service.NetworkServiceClass.URL_BASE;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.OpenableColumns;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -39,8 +45,10 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +65,8 @@ public class HomePage extends AppCompatActivity {
     boolean flag;
     public static final String PHONE_KEY = "phoneNo";
     public static final String SHARED_PREF_NAME = "user_detail";
+    public final String APP_TAG = "MyCustomApp";
+    public final static int CAPTURE_IMAGE_CODE = 1034;
 
 
     @Override
@@ -92,10 +102,34 @@ public class HomePage extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new NetworkServiceClass().uploadImage(getApplicationContext() , phoneNo , getStringImage(generateNoteOnSD(getApplicationContext() , "a_1.png")));
+
+
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(intent, CAPTURE_IMAGE_CODE);
+
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAPTURE_IMAGE_CODE) {
+            Uri uri = data.getData();
+            InputStream in;
+            try {
+                in = getContentResolver().openInputStream(uri);
+                String imageName = getNameFromURI(uri);
+                final Bitmap image = BitmapFactory.decodeStream(in);
+                String encodedImageString = getStringImage(image);
+                new NetworkServiceClass().uploadImage(getApplicationContext(), getPhoneNo(PHONE_KEY), encodedImageString , imageName);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -187,10 +221,7 @@ public class HomePage extends AppCompatActivity {
         return res;
     }
 
-    public String getStringImage(File image){
-
-        String filePath = image.getPath();
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+    public String getStringImage(Bitmap bitmap){
 
         ByteArrayOutputStream ba = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG ,100,ba);
@@ -198,5 +229,12 @@ public class HomePage extends AppCompatActivity {
         String encode =  Base64.encodeToString(imageByte , Base64.NO_WRAP);
 
         return encode;
+    }
+
+    @SuppressLint("Range")
+    public String getNameFromURI(Uri uri) {
+        Cursor c = getContentResolver().query(uri, null, null, null, null);
+        c.moveToFirst();
+        return c.getString(c.getColumnIndex(OpenableColumns.DISPLAY_NAME));
     }
 }

@@ -146,7 +146,7 @@ public class NetworkServiceClass {
         requestQueue.add(request);
     }
 
-    public void uploadImage(Context context , String phone , String image){
+    public void uploadImage(Context context , String phone , String encodedImage , String name){
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
 
@@ -173,11 +173,9 @@ public class NetworkServiceClass {
             @Nullable
             @Override
             protected Map<String, String> getParams() {
-
-                String encodedImage = image;
                 Map<String , String> params = new HashMap<String , String>();
-                params.put("file",encodedImage);
-                params.put("name" , "test_02.jpg");
+                params.put("file", encodedImage);
+                params.put("name" , name);
                 return params;
             }
 
