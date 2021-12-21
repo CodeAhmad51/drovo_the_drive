@@ -47,8 +47,7 @@ public class MainActivity extends AppCompatActivity {
         PhoneNo =  findViewById(R.id.LogInPhoneNo);
         flag = false;
 
-//        new NetworkServiceClass().userRegister(this , new Person("waqar-Ahmad" , 1234567899L , "pwd"));
-//        new NetworkServiceClass().login(this , new Person("waqar-Ahmad" , 1234567899L , "pwd"));
+
 
 
 
@@ -56,9 +55,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
+                String sPhonNo = PhoneNo.getText().toString();
+
                 if (PhoneNo.getText().length() == 0 || LogInpassword.getText().length() == 0) {
                     Toast.makeText(getApplicationContext(), "plz enter username & password", Toast.LENGTH_SHORT).show();
-                } else {
+                }
+
+                else {
                     String phone = PhoneNo.getText().toString();
                     String pass = LogInpassword.getText().toString();
 
@@ -69,14 +73,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        forget_password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), ForgetPage.class);
-                startActivity(i);
-
-            }
-        });
 
         sighUp.setOnClickListener(new View.OnClickListener() {
             @Override

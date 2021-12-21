@@ -15,9 +15,6 @@
             android:name=".ViewImageActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgetPage"
-            android:exported="false" />
-        <activity
             android:name=".SighUpPage"
             android:exported="false" />
         <activity

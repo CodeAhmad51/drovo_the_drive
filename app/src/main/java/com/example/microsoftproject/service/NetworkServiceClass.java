@@ -190,6 +190,35 @@ public class NetworkServiceClass {
         requestQueue.add(request);
     }
 
+    public void deleteImage(Context context , String phone , String ImageName){
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+        StringRequest request = new StringRequest(Request.Method.DELETE, URL_BASE + "/user/"+phone+"/"+ImageName,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(context , "image deleted successfully" , Toast.LENGTH_SHORT);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if(error != null)
+                            Log.d("myTag" , error.toString());
+                        else
+                            Log.d("myTag" , "null error");
+                        Toast.makeText(context, "Error : something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }){
+
+        };
+
+        Log.d("myTag" , "ends here");
+
+        requestQueue.add(request);
+    }
+
 
 
 }

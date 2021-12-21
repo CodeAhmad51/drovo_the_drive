@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,9 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.microsoftproject.HomePage;
 import com.example.microsoftproject.R;
 import com.example.microsoftproject.ViewImageActivity;
 import com.example.microsoftproject.entity.ImageEntity;
+import com.example.microsoftproject.service.NetworkServiceClass;
 
 import java.util.List;
 
@@ -52,7 +56,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyHolder> {
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView imageName;
         TextView imageSize;
-
+        ImageButton deleteButton;
+        ImageView item_image;
         CardView cardView;
 
         public MyHolder(@NonNull View itemView)  {
@@ -63,20 +68,32 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyHolder> {
             imageName = itemView.findViewById(R.id.item_image_name);
             imageSize = itemView.findViewById(R.id.item_image_size);
             cardView =  itemView.findViewById(R.id.cardView);
-            recyclerView =  itemView.findViewById(R.id.recycler_view);
+            item_image =  itemView.findViewById(R.id.item_image);
+            deleteButton =  itemView.findViewById(R.id.delete_button);
 
+            deleteButton.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            int position =  this.getAdapterPosition();
-            ImageEntity imageEntity = imageList.get(position);
 
-            String name = imageEntity.getName();
+            int vid = v.getId();
 
-            Intent intent =  new Intent(context , ViewImageActivity.class);
-            intent.putExtra("name" , name);
-            context.startActivity(intent);
+            if (deleteButton.getId() == vid ){
+                Toast.makeText(context, " image deleted", Toast.LENGTH_SHORT).show();
+                ((HomePage) context).deleteImage(imageList.get(getAdapterPosition()).getName());
+            }
+            else {
+                int position =  this.getAdapterPosition();
+                ImageEntity imageEntity = imageList.get(position);
+
+                String name = imageEntity.getName();
+
+                Intent intent =  new Intent(context , ViewImageActivity.class);
+                intent.putExtra("name" , name);
+                context.startActivity(intent);
+            }
+
 
         }
     }

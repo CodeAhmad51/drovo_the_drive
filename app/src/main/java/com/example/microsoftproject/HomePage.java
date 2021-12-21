@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,12 +22,14 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.OpenableColumns;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -109,8 +112,11 @@ public class HomePage extends AppCompatActivity {
 
                 startActivityForResult(intent, CAPTURE_IMAGE_CODE);
 
+                content();
             }
         });
+
+
 
     }
 
@@ -126,6 +132,9 @@ public class HomePage extends AppCompatActivity {
                 final Bitmap image = BitmapFactory.decodeStream(in);
                 String encodedImageString = getStringImage(image);
                 new NetworkServiceClass().uploadImage(getApplicationContext(), getPhoneNo(PHONE_KEY), encodedImageString , imageName);
+
+                getAllImage(getPhoneNo(PHONE_KEY));
+                Toast.makeText(this,    "successfully uploaded", Toast.LENGTH_SHORT).show();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -168,8 +177,6 @@ public class HomePage extends AppCompatActivity {
 
     @Override
     public void onBackPressed () {
-
-
         if (flag == false) {
             flag = true;
             Toast.makeText(this, "Press again for exit", Toast.LENGTH_SHORT).show();
@@ -209,17 +216,6 @@ public class HomePage extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    public File generateNoteOnSD(Context context, String sFileName) {
-        File res = null;
-        File root = new File(context.getFilesDir(),"mydir");
-        if (!root.exists()) {
-            root.mkdirs();
-        }
-        res = new File(root, sFileName);
-
-        Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
-        return res;
-    }
 
     public String getStringImage(Bitmap bitmap){
 
@@ -237,4 +233,26 @@ public class HomePage extends AppCompatActivity {
         c.moveToFirst();
         return c.getString(c.getColumnIndex(OpenableColumns.DISPLAY_NAME));
     }
+
+    public void content(){
+        refresh(3000);
+        getAllImage(phoneNo);
+    }
+
+    public void refresh(int millisecond){
+        final Handler handler =  new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                content();
+            }
+        };
+        handler.postDelayed(runnable,millisecond);
+    }
+
+    public void deleteImage(String imageName ){
+        new NetworkServiceClass().deleteImage(getApplicationContext(),getPhoneNo(PHONE_KEY) ,imageName );
+        content();
+    }
+
 }
